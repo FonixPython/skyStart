@@ -1,0 +1,69 @@
+.shortcutSection {
+    width: 500px;
+    height: auto;
+    margin: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.shortcutSection input {
+    width: 100%;
+    height: 3rem;
+    font-size: 2rem;
+    background-color: var(--bg-light);
+    border: 5px solid var(--highlight);
+    color: var(--text);
+    padding: 2px;
+    transition: 0.2s;
+    outline: none;
+}
+
+.shortcutSection input:focus {
+    border-image: var(--highlight-gradient) 1;
+    scale: 1.03;
+    transition: 0.2s;
+}
+
+.shortcutSection .shortcutGrid {
+    margin-top: 10px;
+    width: 100%;
+    height: 100px;
+    display: grid;
+    grid-template-columns: auto auto auto auto auto;
+}
+
+.shortcutSection img {
+    width: 80%;
+    height: auto
+}
+
+.shortcutSection a {
+    margin: 5px;
+    padding: 5px;
+    width: 70px;
+    height: 70px;
+    height: auto;
+    background-color: var(--bg-light);
+    border: 5px solid var(--highlight);
+    color: var(--text);
+    font-size: 2rem;
+    transition: .2s;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.shortcutSection a:hover {
+    border-image: var(--highlight-gradient) 1;
+    scale: 1.05;
+    transition: .2s;
+}
+
+.shortcutSection a:active {
+    background: var(--highlight-gradient);
+    scale: 1.1;
+    transition: .2s;
+}

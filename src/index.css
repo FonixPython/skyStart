@@ -1,0 +1,84 @@
+:root {
+  --bg: #02061F;
+  --bg-dark: #010310;
+  --bg-light: #060b29;
+  --text: #E1F0FF;
+  --text-muted: hsl(210, 50%, 84%);
+  --highlight: #496297;
+  --highlight-gradient: linear-gradient(to right, #8BDEDA, #43ADD0, #998EE0, #E17DC2, #EF9393);
+  --danger: #FF383C;
+}
+
+* {
+  font-family: 'Pixelify Sans', sans-serif;
+  font-weight: 100;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+}
+
+.highlighted {
+  background: var(--highlight-gradient);
+  background-clip: text;
+  color: transparent;
+  border: 0px;
+  border-bottom: 1px;
+  border-style: solid;
+  border-image: var(--highlight-gradient) 1;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+.desktop {
+  position: fixed;
+  height: 100vh;
+  width: 100vw;
+}
+
+.app {
+  width: 100%;
+  height: calc(100% - 2rem);
+  backdrop-filter: blur(15px);
+  background-color: color-mix(in srgb, var(--bg-light) 100%, transparent 50%);
+}
+
+.openButton {
+  margin: 10px;
+  padding: 5px;
+  width: 80px;
+  height: 90px;
+  background-color: var(--bg-dark);
+  border: 2px solid var(--highlight);
+  color: var(--text);
+  transition: 0.2s;
+}
+
+.openButton:hover {
+  border-image: var(--highlight-gradient) 1;
+  scale: 1.1;
+  transition: 0.2s;
+}
+
+.openButton:active {
+  background: var(--highlight-gradient);
+  scale: 1.2;
+  transition: 0.1s;
+}
+
+.openButton img {
+  width: 40px;
+  height: auto;
+}
