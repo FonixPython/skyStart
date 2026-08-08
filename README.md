@@ -6,7 +6,11 @@
 - Unlimited shortcuts in a 5 column grid
 - Support for multiple search engines (if you have a request for one just add it as an issue)
 - Astronomy themed backgrounds with an optional blur effect
-- Collapse-able sticky notes, with relative positions so notes can't climb off the screen!
+- Sticky notes
+  - Collapse-able cards
+  - Snap to grid for notes
+  - Middle click to add notes
+  - Relative positions so notes can't climb off the screen! (if they do, you just need to reload)
 
 ## Tech stack:
 - Node with express for the backend
