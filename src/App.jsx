@@ -29,6 +29,9 @@ function App() {
   if (!localStorage.getItem("blurBackground")) {
     localStorage.setItem("blurBackground", "0")
   }
+  if (!localStorage.getItem("snapToGrid")) {
+    localStorage.setItem("snapToGrid", "0")
+  }
 
   async function handleBackgroundBlur() {
     const blurred = (localStorage.getItem("blurBackground") == "1") ? true : false
@@ -62,12 +65,15 @@ function App() {
   const [searchEngine, setSearchEngine] = useState(localStorage.getItem("searchEngine"))
   const [notes, setNotes] = useState(JSON.parse(localStorage.getItem("notes")))
   const [notesVisible, setNotesVisible] = useState(true)
+  const [snapToGrid, setSnapToGrid] = useState((localStorage.getItem("snapToGrid") == "0") ? false : true)
+
 
   useEffect(() => {
     const handleStorage = () => {
       setShortcuts(JSON.parse(localStorage.getItem("shortcuts")))
       setSearchEngine(localStorage.getItem("searchEngine"))
       setNotes(JSON.parse(localStorage.getItem("notes")))
+      setSnapToGrid((localStorage.getItem("snapToGrid") == "0") ? false : true)
       handleBackgroundBlur()
     }
     window.addEventListener("storage", handleStorage)
@@ -75,6 +81,43 @@ function App() {
       window.removeEventListener("storage", handleStorage)
     }
   }, [])
+
+
+  useEffect(() => {
+    const handleAuxClick = (e) => {
+      if (e.button == 1) {
+        const relativeX = e.clientX / window.innerWidth
+        const relativeY = e.clientY / window.innerHeight
+        setNotes(notes => {
+          const id = uuidv4()
+          const updatedNotes = {
+            ...notes,
+            [id]: {
+              id: id,
+              x: relativeX,
+              y: relativeY,
+              text: "",
+              isCollapsed: false
+            }
+          }
+          localStorage.setItem("notes", JSON.stringify(updatedNotes))
+          return updatedNotes
+        })
+      }
+    }
+
+    window.addEventListener("auxclick", (e) => { handleAuxClick(e) })
+    return () => {
+      window.removeEventListener("auxclick", (e) => { handleAuxClick(e) })
+    }
+  }, [])
+
+  document.body.auxclick = (e) => {
+    console.log("a")
+    if (e && (e.which == 2 || e.button == 4)) {
+      console.log('middleclicked')
+    }
+  }
 
   function createNote() {
     const updatedNotes = { ...notes }
@@ -93,10 +136,10 @@ function App() {
   return (
     <>
       <div className='screenCover' style={{ display: settingsOpen ? "initial" : "none" }}>
-        <Settings setShortcuts={setShortcuts} shortcuts={shortcuts} onClose={() => { setSettingsOpen(false) }} searchEngine={searchEngine} setSearchEngine={setSearchEngine}></Settings>
+        <Settings setShortcuts={setShortcuts} shortcuts={shortcuts} onClose={() => { setSettingsOpen(false) }} searchEngine={searchEngine} setSearchEngine={setSearchEngine} snapToGrid={snapToGrid} setSnapToGrid={setSnapToGrid}></Settings>
       </div>
       {notesVisible && Object.values(notes).map((note) => (
-        <SticykNote notes={notes} id={note.id} setNotes={setNotes} key={note.id} />
+        <SticykNote notes={notes} id={note.id} setNotes={setNotes} key={note.id} snapToGrid={snapToGrid} />
       ))}
       <main>
         <Clock></Clock>

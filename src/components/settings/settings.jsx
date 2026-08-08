@@ -52,6 +52,12 @@ export function Settings(props) {
         }
     }
 
+    const handleSnapToGrid = (e) => {
+        const { checked } = e.target
+        localStorage.setItem("snapToGrid", checked ? "1" : "0")
+        props.setSnapToGrid(checked)
+    }
+
     return (
         <div className="settings">
             <button onClick={props.onClose} className="closeButton">X</button>
@@ -65,6 +71,11 @@ export function Settings(props) {
             <div className="backgroundBlur">
                 <p>Blur background:</p>
                 <input type="checkbox" onChange={handleBackgroundBlur} checked={blurBackground} />
+            </div>
+            <hr />
+            <div className="backgroundBlur">
+                <p>Snap to grid:</p>
+                <input type="checkbox" onChange={handleSnapToGrid} checked={props.snapToGrid} />
             </div>
             <hr />
             <p>Shortcuts:</p>
