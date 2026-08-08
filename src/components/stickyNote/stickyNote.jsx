@@ -44,7 +44,7 @@ export function SticykNote(props) {
                     <p className="preview">{props.notes[props.id].text}</p>
                     <button className="closeButton" onClick={onDelete}><img src="delete.webp" alt="Delete icon" /></button>
                 </div>
-                {!props.notes[props.id].isCollapsed && <textarea placeholder="Type here..." value={props.notes[props.id].text} onChange={onType} />}
+                {!props.notes[props.id].isCollapsed && <textarea spellCheck="false" placeholder="Type here..." value={props.notes[props.id].text} onChange={onType} />}
             </div>
         </Draggable>
     )
