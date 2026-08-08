@@ -63,7 +63,7 @@ main {
   top: 0;
   left: 0;
   z-index: 500;
-  backdrop-filter: blur(20px);
+  background-color: rgba(0,0,0,0.6);
   transition: 0.1s;
 }
 
@@ -98,4 +98,44 @@ main {
   scale: 1.1;
   background: var(--highlight-gradient);
   transition: 0.1s;
+}
+
+.notesButtons {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  left: 0;
+  bottom: 0;
+  margin: 10px;
+}
+
+.notesButtons button img {
+  height: 30px;
+  width: auto;
+}
+
+.notesButtons button {
+  padding: 5px 5px;
+  margin: 5px;
+  color: var(--text);
+  background-color: var(--bg-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  margin-top: auto;
+  border: 2px solid var(--highlight);
+}
+
+.notesButtons button:hover {
+  border-image: var(--highlight-gradient) 1;
+}
+
+.notesButtons button:active {
+  background: var(--highlight-gradient);
+  transition: .5s;
+}
+
+.notesButtons .visible {
+  background: var(--highlight-gradient);
 }

@@ -8,10 +8,13 @@ export function ShortcutSection(props) {
         ["Ecosia", "https://www.ecosia.org/"],
         ["Brave Search", "https://search.brave.com/search"]
     ]
+    window.onload = function () {
+        document.getElementById("search").focus()
+    }
     return (
         <div className="shortcutSection">
             <form action={searchEngineDict[props.searchEngine][1]} method="GET">
-                <input type="text" placeholder={"Search on " + searchEngineDict[props.searchEngine][0]} name="q" />
+                <input id="search" type="text" placeholder={"Search on " + searchEngineDict[props.searchEngine][0]} name="q" />
             </form>
             <div className="shortcutGrid">
                 {props.shortcuts.map((link) => (

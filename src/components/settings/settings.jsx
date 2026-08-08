@@ -8,6 +8,7 @@ export function Settings(props) {
         ["Ecosia", "https://www.ecosia.org/"],
         ["Brave Search", "https://search.brave.com/search"]
     ]
+    const [blurBackground, setBlurBackground] = useState((localStorage.getItem("blurBackground") == "1") ? true : false)
 
     const handleChange = (e) => {
         const { name, value } = e.target
@@ -40,6 +41,17 @@ export function Settings(props) {
         localStorage.setItem("searchEngine", value)
     }
 
+    const handleBackgroundBlur = (e) => {
+        const { checked } = e.target
+        setBlurBackground(checked)
+        localStorage.setItem("blurBackground", checked ? "1" : "0")
+        if (checked) {
+            document.body.style.backdropFilter = "blur(4px)"
+        } else {
+            document.body.style.backdropFilter = ""
+        }
+    }
+
     return (
         <div className="settings">
             <button onClick={props.onClose} className="closeButton">X</button>
@@ -49,6 +61,11 @@ export function Settings(props) {
                     <option value={i}>{engine[0]}</option>
                 ))}
             </select>
+            <hr />
+            <div className="backgroundBlur">
+                <p>Blur background:</p>
+                <input type="checkbox" onChange={handleBackgroundBlur} checked={blurBackground} />
+            </div>
             <hr />
             <p>Shortcuts:</p>
             <button onClick={handleAdd}>Add shortcut</button>

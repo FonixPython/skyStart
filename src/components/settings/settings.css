@@ -115,3 +115,15 @@
     margin: 5px;
     border-image: var(--highlight-gradient) 1;
 }
+
+.backgroundBlur {
+    width: 95%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.backgroundBlur input {
+    width: auto;
+    height: 1.5rem;
+}
