@@ -35,7 +35,7 @@ export function SticykNote(props) {
         props.setNotes(updatedNotes)
         localStorage.setItem("notes", JSON.stringify(updatedNotes))
     };
-
+    
     return (
         <Draggable nodeRef={nodeRef} handle=".header" defaultPosition={{ x: props.notes[props.id].x * window.innerWidth, y: props.notes[props.id].y * window.innerHeight }} bounds="parent" onDrag={onMove}>
             <div className="stickyNote" ref={nodeRef}>

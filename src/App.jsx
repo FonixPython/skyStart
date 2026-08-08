@@ -63,6 +63,18 @@ function App() {
   const [notes, setNotes] = useState(JSON.parse(localStorage.getItem("notes")))
   const [notesVisible, setNotesVisible] = useState(true)
 
+  useEffect(() => {
+    const handleStorage = () => {
+      setShortcuts(JSON.parse(localStorage.getItem("shortcuts")))
+      setSearchEngine(localStorage.getItem("searchEngine"))
+      setNotes(JSON.parse(localStorage.getItem("notes")))
+    }
+    window.addEventListener("storage", handleStorage)
+    return () => {
+      window.removeEventListener("storage", handleStorage)
+    }
+  }, [])
+
   function createNote() {
     const updatedNotes = { ...notes }
     const id = uuidv4()
