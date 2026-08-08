@@ -19,10 +19,7 @@
 body {
   background-color: var(--bg);
   color: var(--text);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  position: relative;
   width: 100vw;
   height: 100vh;
 }
@@ -37,9 +34,13 @@ body {
   border-image: var(--highlight-gradient) 1;
 }
 
-body {
+main {
   display: flex;
   flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
 }
 
 .desktop {
@@ -55,30 +56,46 @@ body {
   background-color: color-mix(in srgb, var(--bg-light) 100%, transparent 50%);
 }
 
-.openButton {
-  margin: 10px;
-  padding: 5px;
-  width: 80px;
-  height: 90px;
-  background-color: var(--bg-dark);
-  border: 2px solid var(--highlight);
-  color: var(--text);
-  transition: 0.2s;
-}
-
-.openButton:hover {
-  border-image: var(--highlight-gradient) 1;
-  scale: 1.1;
-  transition: 0.2s;
-}
-
-.openButton:active {
-  background: var(--highlight-gradient);
-  scale: 1.2;
+.screenCover {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  z-index: 500;
+  backdrop-filter: blur(20px);
   transition: 0.1s;
 }
 
-.openButton img {
-  width: 40px;
-  height: auto;
+.openSettings {
+  position: fixed;
+  top: 0;
+  right: 0;
+  margin: 10px;
+  width: 50px;
+  height: 50px;
+  padding: 5px;
+  background-color: var(--bg-light);
+  border: 3px solid var(--highlight);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.1s;
+}
+
+.openSettings img {
+  height: 35px;
+  width: auto;
+}
+
+.openSettings:hover {
+  scale: 1.05;
+  border-image: var(--highlight-gradient) 1;
+  transition: 0.1s;
+}
+
+.openSettings:active {
+  scale: 1.1;
+  background: var(--highlight-gradient);
+  transition: 0.1s;
 }

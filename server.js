@@ -2,6 +2,8 @@ import express from "express";
 import dotenv from "dotenv";
 import path from "path";
 import os from "os";
+import fs from "fs";
+import fsPromises from "fs/promises";
 import { fileURLToPath } from "url";
 
 
@@ -16,6 +18,50 @@ backend.use(express.static(path.join(__dirname, "dist")));
 backend.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "dist/index.html"))
 })
+backend.get("/api/getAPOD", async (req, res) => {
+    if (!fs.existsSync("./cache.json")) {
+        const apiResult = await fetch(
+            "https://api.nasa.gov/planetary/apod?" +
+            new URLSearchParams({
+                api_key: process.env.API_KEY,
+                thumbs: "true"
+            }).toString()
+        );
+        const apiResultJson = await apiResult.json();
+        const saveObject = {
+            image: apiResultJson.hdurl,
+            date: apiResultJson.date
+        };
+        await fsPromises.writeFile("./cache.json", JSON.stringify(saveObject));
+        return res.json({ image: apiResultJson.hdurl });
+    } else {
+        const fileData = JSON.parse(await fsPromises.readFile("./cache.json", "utf8"));
+        const date = new Date();
+        const today = `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, "0")}-${String(date.getUTCDate()).padStart(2, "0")}`;
+        if (fileData.date === today) {
+            return res.json({ image: fileData.image });
+        } else {
+            const apiResult = await fetch(
+                "https://api.nasa.gov/planetary/apod?" +
+                new URLSearchParams({
+                    api_key: process.env.API_KEY,
+                    thumbs: "true"
+                }).toString()
+            );
+            const apiResultJson = await apiResult.json();
+            const saveObject = {
+                image: apiResultJson.hdurl,
+                date: apiResultJson.date
+            };
+            await fsPromises.writeFile("./cache.json", JSON.stringify(saveObject));
+            return res.json({
+                image: apiResultJson.hdurl
+            });
+        }
+    }
+});
+
+
 function getIPv4Addresses() {
     const interfaces = os.networkInterfaces();
     const addresses = [];

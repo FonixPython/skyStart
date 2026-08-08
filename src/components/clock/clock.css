@@ -3,7 +3,7 @@
     top: 0;
     left: 0;
     margin: 10px;
-    width: 150px;
+    width: 200px;
     height: auto;
     display: flex;
     flex-direction: column;
@@ -12,9 +12,9 @@
 }
 
 .clock .time {
-    font-size: 4rem;
+    font-size: 5rem;
 }
 
 .clock .date {
-    font-size: 1.7rem;
+    font-size: 2.3rem;
 }

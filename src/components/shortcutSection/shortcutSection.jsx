@@ -1,19 +1,22 @@
 import "./shortcutSection.css"
-import { use, useState } from "react"
+import { use, useEffect, useState } from "react"
 
-export function ShortcutSection() {
-    const [shortcuts, setShortcuts] = useState(JSON.parse(localStorage.getItem("shortcuts")))
-    const [searchEngine, setSearchEngine] = useState(localStorage.getItem("searchEngine"))
-
+export function ShortcutSection(props) {
+    const searchEngineDict = [
+        ["Google", "https://www.google.com/search"],
+        ["DuckDuckGo", "https://duckduckgo.com/search"],
+        ["Ecosia", "https://www.ecosia.org/"],
+        ["Brave Search", "https://search.brave.com/search"]
+    ]
     return (
         <div className="shortcutSection">
-            <form action={searchEngine} method="GET">
-                <input type="text" placeholder="Search on google" name="q" />
+            <form action={searchEngineDict[props.searchEngine][1]} method="GET">
+                <input type="text" placeholder={"Search on " + searchEngineDict[props.searchEngine][0]} name="q" />
             </form>
             <div className="shortcutGrid">
-                {shortcuts.map((link) => (
-                    <a href={link}>
-                        <img src={link + "/favicon.ico"} />
+                {props.shortcuts.map((link) => (
+                    <a href={link[0]}>
+                        <img src={link[1]} />
                     </a>
                 ))}
             </div>

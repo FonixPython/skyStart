@@ -1,0 +1,117 @@
+.settings {
+    position: absolute;
+    left: calc((100vw - 350px)/2);
+    top: calc((100vh - 500px)/2);
+    z-index: 1000;
+    width: 350px;
+    height: 500px;
+    background-color: var(--bg-light);
+    border: 3px solid var(--highlight);
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: scroll;
+}
+
+.settings .shortcutsContainer {
+    width: 100%;
+}
+
+.settings .shortcutCard {
+    width: 95%;
+    border: 2px solid var(--highlight);
+    background-color: var(--bg-dark);
+    padding: 5px;
+    margin: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.settings input {
+    width: 95%;
+    font-size: 1rem;
+    background-color: var(--bg-light);
+    color: var(--text);
+    border: 2px solid var(--highlight);
+    height: 2rem;
+    transition: 0.2s;
+    outline: none;
+    margin: 2px;
+}
+
+.settings input:focus {
+    scale: 1.05;
+    border-image: var(--highlight-gradient) 1;
+    transition: 0.2s;
+}
+
+.settings button {
+    background-color: var(--bg-light);
+    border: 2px solid var(--highlight);
+    color: var(--text);
+    width: 95%;
+    height: 2rem;
+    padding: 5px;
+    font-size: 1rem;
+    transition: 0.2s;
+}
+
+.settings button:hover {
+    border-image: var(--highlight-gradient) 1;
+    scale: 1.05;
+    transition: 0.2s;
+}
+
+.settings button:active {
+    scale: 1.1;
+    background: var(--highlight-gradient);
+    transition: 0.1s;
+}
+
+.settings .closeButton {
+    z-index: 1001;
+    position: fixed;
+    color: var(--danger);
+    height: 30px;
+    width: 30px;
+    align-self: flex-end;
+}
+
+.settings .closeButton:hover {
+    border-color: var(--danger);
+}
+
+.settings .closeButton:active {
+    background-color: var(--danger);
+}
+
+.settings p {
+    font-size: 1.5rem;
+    align-self: flex-start;
+}
+
+.settings select {
+    width: 95%;
+    height: 2rem;
+    background-color: var(--bg-light);
+    color: var(--text);
+    border: 3px solid var(--highlight);
+    outline: none;
+    font-size: 1rem;
+    margin: 5px;
+    padding: 5px;
+}
+
+.settings option {
+    background-color: var(--bg-light);
+    color: var(--text);
+}
+
+.settings hr {
+    width: 100%;
+    height: 3px;
+    margin: 5px;
+    border-image: var(--highlight-gradient) 1;
+}

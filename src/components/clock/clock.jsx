@@ -19,7 +19,7 @@ export function Clock() {
                 {String(time.getHours()).padStart(2, "0")}:{String(time.getMinutes()).padStart(2, "0")}
             </p>
             <p className="date">
-                {String(time.getFullYear())}.{String(time.getMonth())}.{String(time.getDay())}
+                {String(time.getFullYear())}.{String(time.getMonth() + 1)}.{String(time.getDate())}
             </p>
         </div>
     )
