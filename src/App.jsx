@@ -68,6 +68,7 @@ function App() {
       setShortcuts(JSON.parse(localStorage.getItem("shortcuts")))
       setSearchEngine(localStorage.getItem("searchEngine"))
       setNotes(JSON.parse(localStorage.getItem("notes")))
+      handleBackgroundBlur()
     }
     window.addEventListener("storage", handleStorage)
     return () => {
