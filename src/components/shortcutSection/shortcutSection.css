@@ -32,11 +32,13 @@
     height: 100px;
     display: grid;
     grid-template-columns: auto auto auto auto auto;
+    margin-left: 5px;
 }
 
 .shortcutSection img {
+    height: 80%;
     width: 80%;
-    height: auto
+    object-fit: contain;
 }
 
 .shortcutSection a {
@@ -44,7 +46,6 @@
     padding: 5px;
     width: 70px;
     height: 70px;
-    height: auto;
     background-color: var(--bg-light);
     border: 5px solid var(--highlight);
     color: var(--text);
@@ -54,7 +55,6 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-
 }
 
 .shortcutSection a:hover {
@@ -67,4 +67,28 @@
     background: var(--highlight-gradient);
     scale: 1.1;
     transition: .2s;
+}
+
+@media (max-width: 600px) {
+    .shortcutSection {
+        width: 400px;
+    }
+
+    .shortcutSection input {
+        width: 300px;
+        height: 2rem;
+        font-size: 1.5rem;
+    }
+
+    .shortcutSection a {
+        margin: 0;
+        padding: 3px;
+        width: 50px;
+        height: 50px;
+    }
+
+    .shortcutSection .shortcutGrid {
+        margin-left: 12px;
+        gap: 3px;
+    }
 }
