@@ -10,6 +10,7 @@ export function SticykNote(props) {
         updatedNotes[props.id].text = e.target.value
         props.setNotes(updatedNotes)
         localStorage.setItem("notes", JSON.stringify(updatedNotes))
+        localStorage.setItem("lastUpdate", new Date().toISOString())
     }
 
     function onCollapse() {
@@ -17,6 +18,7 @@ export function SticykNote(props) {
         updatedNotes[props.id].isCollapsed = !props.notes[props.id].isCollapsed
         props.setNotes(updatedNotes)
         localStorage.setItem("notes", JSON.stringify(updatedNotes))
+        localStorage.setItem("lastUpdate", new Date().toISOString())
     }
 
     function onDelete() {
@@ -24,6 +26,7 @@ export function SticykNote(props) {
         delete updatedNotes[props.id]
         props.setNotes(updatedNotes)
         localStorage.setItem("notes", JSON.stringify(updatedNotes))
+        localStorage.setItem("lastUpdate", new Date().toISOString())
     }
 
     const onMove = (e, ui) => {
@@ -34,6 +37,7 @@ export function SticykNote(props) {
         updatedNotes[props.id].y = currentRelativeY
         props.setNotes(updatedNotes)
         localStorage.setItem("notes", JSON.stringify(updatedNotes))
+        localStorage.setItem("lastUpdate", new Date().toISOString())
     };
 
     return (

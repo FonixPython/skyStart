@@ -18,6 +18,7 @@ export function Settings(props) {
         updatedShortcuts[index][type] = value
         props.setShortcuts(updatedShortcuts)
         localStorage.setItem("shortcuts", JSON.stringify(updatedShortcuts))
+        localStorage.setItem("lastUpdate", new Date().toISOString())
     }
 
     const handleDelete = (e) => {
@@ -26,6 +27,7 @@ export function Settings(props) {
         updatedShortcuts.splice(index, 1)
         props.setShortcuts(updatedShortcuts)
         localStorage.setItem("shortcuts", JSON.stringify(updatedShortcuts))
+        localStorage.setItem("lastUpdate", new Date().toISOString())
     }
 
     const handleAdd = () => {
@@ -33,12 +35,14 @@ export function Settings(props) {
         updatedShortcuts.push([])
         props.setShortcuts(updatedShortcuts)
         localStorage.setItem("shortcuts", JSON.stringify(updatedShortcuts))
+        localStorage.setItem("lastUpdate", new Date().toISOString())
     }
 
     const handleEngineChange = (e) => {
         const { value } = e.target
         props.setSearchEngine(value)
         localStorage.setItem("searchEngine", value)
+        localStorage.setItem("lastUpdate", new Date().toISOString())
     }
 
     const handleBackgroundBlur = (e) => {
@@ -52,16 +56,68 @@ export function Settings(props) {
         }
     }
 
+
     const handleSnapToGrid = (e) => {
         const { checked } = e.target
         localStorage.setItem("snapToGrid", checked ? "1" : "0")
         props.setSnapToGrid(checked)
+        localStorage.setItem("lastUpdate", new Date().toISOString())
     }
 
     const handleSyncChange = (e) => {
         const { checked } = e.target
         localStorage.setItem("sync", checked ? "1" : "0")
         props.setSync(checked)
+    }
+
+    const handleSyncIdChange = (e) => {
+        const { value } = e.target
+        localStorage.setItem("syncId", value)
+        props.setSyncId(value)
+    }
+
+    const generateSyncId = async () => {
+        const result = await fetch("/api/registerSync")
+        const resultJson = await result.json()
+        if (result.ok) {
+            localStorage.setItem("syncId", resultJson.id)
+            props.setSyncId(resultJson.id)
+            const notesResult = await fetch("/api/updateNotes/" + resultJson.id, {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    updatedNotes: Object.values(JSON.parse(localStorage.getItem("notes")))
+                })
+            })
+            if (notesResult.ok) {
+                const settingsResult = await fetch("/api/updateSettings/" + resultJson.id, {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        updatedSettings: {
+                            blurBackground: (localStorage.getItem("blurBackground") == "1") ? true : false,
+                            searchEngine: props.searchEngine,
+                            shortcuts: props.shortcuts,
+                            snapToGrid: props.snapToGrid
+                        }
+                    })
+                })
+            }
+        }
+        localStorage.setItem("lastUpdate", new Date().toISOString())
+    }
+
+    const deleteSync = async () => {
+        const result = await fetch("/api/deleteSync/" + props.syncId, { method: "DELETE" })
+        if (result.ok) {
+            localStorage.setItem("syncId", "")
+            props.setSyncId("")
+            props.setSync(false)
+        }
     }
 
     return (
@@ -89,10 +145,10 @@ export function Settings(props) {
                 <input type="checkbox" onChange={handleSyncChange} checked={props.sync} />
             </div>
             {props.sync && <div className="shortcutsContainer">
-                <input type="text" disabled={!props.sync} />
+                <input type="text" disabled={!props.sync} value={props.syncId} onChange={handleSyncIdChange} />
                 <div style={{ display: "flex", width: "95%", alignItems: "center", justifyContent: "center" }}>
-                    <button disabled={!props.sync}>Generate ID</button>
-                    <button disabled={!props.sync} style={{ color: "var(--danger)", borderColor: "var(--danger)" }}>Delete Sync</button>
+                    <button disabled={!props.sync} onClick={generateSyncId}>Generate ID</button>
+                    <button disabled={!props.sync} style={{ color: "var(--danger)", borderColor: "var(--danger)" }} onClick={deleteSync}>Delete Sync</button>
                 </div>
             </div>}
             <hr />

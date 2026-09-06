@@ -35,6 +35,9 @@ function App() {
   if (!localStorage.getItem("sync")) {
     localStorage.setItem("sync", "0")
   }
+  if (!localStorage.getItem("syncId")) {
+    localStorage.setItem("syncId", "")
+  }
 
   async function handleBackgroundBlur() {
     const blurred = (localStorage.getItem("blurBackground") == "1") ? true : false
@@ -69,7 +72,8 @@ function App() {
   const [notes, setNotes] = useState(JSON.parse(localStorage.getItem("notes")))
   const [notesVisible, setNotesVisible] = useState(true)
   const [snapToGrid, setSnapToGrid] = useState((localStorage.getItem("snapToGrid") == "0") ? false : true)
-  const [sync, setSync] = useState(localStorage.getItem("sync") ? false : true)
+  const [sync, setSync] = useState(localStorage.getItem("sync") == "0" ? false : true)
+  const [syncId, setSyncId] = useState(localStorage.getItem("syncId"))
 
 
   useEffect(() => {
@@ -79,6 +83,7 @@ function App() {
       setNotes(JSON.parse(localStorage.getItem("notes")))
       setSnapToGrid((localStorage.getItem("snapToGrid") == "0") ? false : true)
       setSync(localStorage.getItem("sync") ? false : true)
+      setSyncId(localStorage.getItem("syncId"))
     }
     window.addEventListener("storage", handleStorage)
     return () => {
@@ -137,10 +142,70 @@ function App() {
     localStorage.setItem("notes", JSON.stringify(updatedNotes))
   }
 
+  const doSync = async () => {
+    if (sync && syncId != "") {
+      const lastUpdate = await fetch("/api/getLastUpdate/" + localStorage.getItem("syncId"))
+      if (lastUpdate.ok) {
+        const lastUpdateJson = await lastUpdate.json()
+        if (new Date(lastUpdateJson.lastUpdate) > new Date(localStorage.getItem("lastUpdate")) || !localStorage.getItem("lastUpdate")) {
+          const newNotes = await fetch("/api/getNotes/" + localStorage.getItem("syncId"))
+          const newNotesJson = await newNotes.json()
+          setNotes(JSON.parse(newNotesJson.notes))
+          localStorage.setItem("notes", newNotesJson.notes)
+          const newSettings = await fetch("/api/getSettings/" + localStorage.getItem("syncId"))
+          const newSettingsJson = await newSettings.json()
+          setShortcuts(newSettingsJson.settings.shortcuts)
+          localStorage.setItem("shortcuts", JSON.stringify(newSettingsJson.settings.shortcuts))
+          setSearchEngine(newSettingsJson.settings.searchEngine)
+          localStorage.setItem("searchEngine", newSettingsJson.settings.searchEngine)
+          setSnapToGrid((newSettingsJson.settings.snapToGrid == "0") ? false : true)
+          localStorage.setItem("snapToGrid", JSON.stringify(newSettingsJson.settings.snapToGrid))
+          localStorage.setItem("lastUpdate", lastUpdateJson.lastUpdate)
+        }
+        else if (new Date(lastUpdateJson.lastUpdate) < new Date(localStorage.getItem("lastUpdate"))) {
+          const notesResult = await fetch("/api/updateNotes/" + localStorage.getItem("syncId"), {
+            method: "POST",
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              updatedNotes: Object.values(JSON.parse(localStorage.getItem("notes")))
+            })
+          })
+          if (notesResult.ok) {
+            const settingsResult = await fetch("/api/updateSettings/" + localStorage.getItem("syncId"), {
+              method: "POST",
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                updatedSettings: {
+                  blurBackground: (localStorage.getItem("blurBackground") == "1") ? true : false,
+                  searchEngine: searchEngine,
+                  shortcuts: shortcuts,
+                  snapToGrid: snapToGrid
+                }
+              })
+            })
+          }
+        }
+      }
+    }
+  }
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      doSync()
+    }, 1000 * 3)
+    return () => {
+      clearInterval(timer)
+    }
+  })
+
   return (
     <>
       <div className='screenCover' style={{ display: settingsOpen ? "initial" : "none" }}>
-        <Settings setShortcuts={setShortcuts} shortcuts={shortcuts} onClose={() => { setSettingsOpen(false) }} searchEngine={searchEngine} setSearchEngine={setSearchEngine} snapToGrid={snapToGrid} setSnapToGrid={setSnapToGrid} sync={sync} setSync={setSync}></Settings>
+        <Settings setShortcuts={setShortcuts} shortcuts={shortcuts} onClose={() => { setSettingsOpen(false) }} searchEngine={searchEngine} setSearchEngine={setSearchEngine} snapToGrid={snapToGrid} setSnapToGrid={setSnapToGrid} sync={sync} setSync={setSync} syncId={syncId} setSyncId={setSyncId}></Settings>
       </div>
       {notesVisible && Object.values(notes).map((note) => (
         <SticykNote notes={notes} id={note.id} setNotes={setNotes} key={note.id} snapToGrid={snapToGrid} />

@@ -85,9 +85,9 @@ backend.get("/api/registerSync", registerSync)
 backend.delete("/api/deleteSync/:syncId", deleteSync)
 backend.post("/api/updateNotes/:syncId", updateNotes)
 backend.post("/api/updateSettings/:syncId", updateSettings)
-backend.get("/api/getLastUpdate", getLastUpdate)
-backend.get("/api/getNotes", getNotes)
-backend.get("/api/getSettings", getSettings)
+backend.get("/api/getLastUpdate/:syncId", getLastUpdate)
+backend.get("/api/getNotes/:syncId", getNotes)
+backend.get("/api/getSettings/:syncId", getSettings)
 
 function getIPv4Addresses() {
     const interfaces = os.networkInterfaces();
