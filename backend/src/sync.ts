@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { prisma } from "./db";
+import { prisma } from "./db.js";
 import { syncBuiltinESMExports } from "module";
 import { createSecureContext } from "tls";
 import { settings } from "cluster";

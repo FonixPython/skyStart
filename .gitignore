@@ -144,3 +144,5 @@ vite.config.ts.timestamp-*
 
 cache.json
 /generated/prisma
+
+dev.db

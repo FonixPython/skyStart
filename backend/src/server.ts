@@ -5,7 +5,7 @@ import path from "path";
 import os from "os";
 import fs from "fs";
 
-import { registerSync, deleteSync, updateNotes, updateSettings, getLastUpdate, getNotes, getSettings } from "./sync"
+import { registerSync, deleteSync, updateNotes, updateSettings, getLastUpdate, getNotes, getSettings } from "./sync.js"
 
 import fsPromises from "fs/promises";
 import { fileURLToPath } from "url";
@@ -81,13 +81,13 @@ backend.get("/api/getAPOD", async (req: Request, res: Response) => {
     }
 });
 
-backend.get("/api/registerSync",registerSync)
-backend.delete("/api/deleteSync/:syncId",deleteSync)
-backend.post("/api/updateNotes/:syncId",updateNotes)
-backend.post("/api/updateSettings/:syncId",updateSettings)
-backend.get("/api/getLastUpdate",getLastUpdate)
-backend.get("/api/getNotes",getNotes)
-backend.get("/api/getSettings",getSettings)
+backend.get("/api/registerSync", registerSync)
+backend.delete("/api/deleteSync/:syncId", deleteSync)
+backend.post("/api/updateNotes/:syncId", updateNotes)
+backend.post("/api/updateSettings/:syncId", updateSettings)
+backend.get("/api/getLastUpdate", getLastUpdate)
+backend.get("/api/getNotes", getNotes)
+backend.get("/api/getSettings", getSettings)
 
 function getIPv4Addresses() {
     const interfaces = os.networkInterfaces();
