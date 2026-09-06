@@ -58,6 +58,12 @@ export function Settings(props) {
         props.setSnapToGrid(checked)
     }
 
+    const handleSyncChange = (e) => {
+        const { checked } = e.target
+        localStorage.setItem("sync", checked ? "1" : "0")
+        props.setSync(checked)
+    }
+
     return (
         <div className="settings">
             <button onClick={props.onClose} className="closeButton">X</button>
@@ -77,6 +83,18 @@ export function Settings(props) {
                 <p>Snap to grid:</p>
                 <input type="checkbox" onChange={handleSnapToGrid} checked={props.snapToGrid} />
             </div>
+            <hr />
+            <div className="backgroundBlur">
+                <p>Sync:</p>
+                <input type="checkbox" onChange={handleSyncChange} checked={props.sync} />
+            </div>
+            {props.sync && <div className="shortcutsContainer">
+                <input type="text" disabled={!props.sync} />
+                <div style={{ display: "flex", width: "95%", alignItems: "center", justifyContent: "center" }}>
+                    <button disabled={!props.sync}>Generate ID</button>
+                    <button disabled={!props.sync} style={{ color: "var(--danger)", borderColor: "var(--danger)" }}>Delete Sync</button>
+                </div>
+            </div>}
             <hr />
             <p>Shortcuts:</p>
             <button onClick={handleAdd}>Add shortcut</button>

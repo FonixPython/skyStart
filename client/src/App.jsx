@@ -32,6 +32,9 @@ function App() {
   if (!localStorage.getItem("snapToGrid")) {
     localStorage.setItem("snapToGrid", "0")
   }
+  if (!localStorage.getItem("sync")) {
+    localStorage.setItem("sync", "0")
+  }
 
   async function handleBackgroundBlur() {
     const blurred = (localStorage.getItem("blurBackground") == "1") ? true : false
@@ -66,6 +69,7 @@ function App() {
   const [notes, setNotes] = useState(JSON.parse(localStorage.getItem("notes")))
   const [notesVisible, setNotesVisible] = useState(true)
   const [snapToGrid, setSnapToGrid] = useState((localStorage.getItem("snapToGrid") == "0") ? false : true)
+  const [sync, setSync] = useState(localStorage.getItem("sync") ? false : true)
 
 
   useEffect(() => {
@@ -74,7 +78,7 @@ function App() {
       setSearchEngine(localStorage.getItem("searchEngine"))
       setNotes(JSON.parse(localStorage.getItem("notes")))
       setSnapToGrid((localStorage.getItem("snapToGrid") == "0") ? false : true)
-      handleBackgroundBlur()
+      setSync(localStorage.getItem("sync") ? false : true)
     }
     window.addEventListener("storage", handleStorage)
     return () => {
@@ -136,7 +140,7 @@ function App() {
   return (
     <>
       <div className='screenCover' style={{ display: settingsOpen ? "initial" : "none" }}>
-        <Settings setShortcuts={setShortcuts} shortcuts={shortcuts} onClose={() => { setSettingsOpen(false) }} searchEngine={searchEngine} setSearchEngine={setSearchEngine} snapToGrid={snapToGrid} setSnapToGrid={setSnapToGrid}></Settings>
+        <Settings setShortcuts={setShortcuts} shortcuts={shortcuts} onClose={() => { setSettingsOpen(false) }} searchEngine={searchEngine} setSearchEngine={setSearchEngine} snapToGrid={snapToGrid} setSnapToGrid={setSnapToGrid} sync={sync} setSync={setSync}></Settings>
       </div>
       {notesVisible && Object.values(notes).map((note) => (
         <SticykNote notes={notes} id={note.id} setNotes={setNotes} key={note.id} snapToGrid={snapToGrid} />

@@ -1,12 +1,9 @@
 import { Request, Response } from "express";
 import { prisma } from "./db.js";
-import { syncBuiltinESMExports } from "module";
-import { createSecureContext } from "tls";
-import { settings } from "cluster";
 
 export async function registerSync(req: Request, res: Response) {
     try {
-        const result = await prisma.sync.create({ data: { lastUpdate: Date(), notes: "{}", "settings": "{}" } })
+        const result = await prisma.sync.create({ data: { lastUpdate: new Date(), notes: "{}", "settings": "{}" } })
         return res.json({ id: result.id })
     } catch (e) {
         console.log(e)
@@ -49,7 +46,7 @@ export async function updateNotes(req: Request, res: Response) {
             req.body.updatedNotes.map((note: Note) => {
                 updatedNotesObject[note.id] = note
             })
-            const result = await prisma.sync.update({ where: { id: syncId }, data: { notes: JSON.stringify(updatedNotesObject), lastUpdate: Date() } })
+            const result = await prisma.sync.update({ where: { id: syncId }, data: { notes: JSON.stringify(updatedNotesObject), lastUpdate: new Date() } })
             if (result) {
                 res.sendStatus(200)
             } else {
