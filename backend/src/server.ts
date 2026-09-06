@@ -1,66 +1,83 @@
 import express from "express";
+import { Request, Response } from "express";
 import dotenv from "dotenv";
 import path from "path";
 import os from "os";
 import fs from "fs";
+
 import fsPromises from "fs/promises";
 import { fileURLToPath } from "url";
 
 
+interface save {
+    image: string,
+    date: string
+}
+interface nasaReturn {
+    hdurl: string,
+    date: string
+}
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const cachePath = path.join(__dirname, "cache.json");
+
 
 dotenv.config();
 const PORT = Number(process.env.PORT) || 3000;
 const backend = express()
+backend.use(express.json());
 
-backend.use(express.static(path.join(__dirname, "dist")));
-backend.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "dist/index.html"))
+backend.use(express.static(path.join(__dirname, "public")));
+backend.get("/", (req: Request, res: Response) => {
+    res.sendFile(path.join(__dirname, "public/index.html"))
 })
-backend.get("/api/getAPOD", async (req, res) => {
-    if (!fs.existsSync("./cache.json")) {
+
+
+backend.get("/api/getAPOD", async (req: Request, res: Response) => {
+    if (!fs.existsSync(cachePath)) {
+        const fetchParameters = new URLSearchParams({
+            api_key: process.env.API_KEY || "",
+            thumbs: "true"
+        }).toString()
         const apiResult = await fetch(
             "https://api.nasa.gov/planetary/apod?" +
-            new URLSearchParams({
-                api_key: process.env.API_KEY,
-                thumbs: "true"
-            }).toString()
+            fetchParameters
         );
-        const apiResultJson = await apiResult.json();
-        const saveObject = {
+        const apiResultJson = await apiResult.json() as nasaReturn;
+        const saveObject: save = {
             image: apiResultJson.hdurl,
             date: apiResultJson.date
         };
-        await fsPromises.writeFile("./cache.json", JSON.stringify(saveObject));
+        await fsPromises.writeFile(cachePath, JSON.stringify(saveObject));
         return res.json({ image: apiResultJson.hdurl });
     } else {
-        const fileData = JSON.parse(await fsPromises.readFile("./cache.json", "utf8"));
+        const fileData = JSON.parse(await fsPromises.readFile(cachePath, "utf8"));
         const date = new Date();
         const today = `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, "0")}-${String(date.getUTCDate()).padStart(2, "0")}`;
         if (fileData.date === today) {
             return res.json({ image: fileData.image });
         } else {
+            const fetchParameters = new URLSearchParams({
+                api_key: process.env.API_KEY || "",
+                thumbs: "true"
+            }).toString()
             const apiResult = await fetch(
                 "https://api.nasa.gov/planetary/apod?" +
-                new URLSearchParams({
-                    api_key: process.env.API_KEY,
-                    thumbs: "true"
-                }).toString()
+                fetchParameters
             );
-            const apiResultJson = await apiResult.json();
-            const saveObject = {
+            const apiResultJson = await apiResult.json() as nasaReturn;
+            const saveObject: save = {
                 image: apiResultJson.hdurl,
                 date: apiResultJson.date
             };
-            await fsPromises.writeFile("./cache.json", JSON.stringify(saveObject));
+            await fsPromises.writeFile(cachePath, JSON.stringify(saveObject));
             return res.json({
                 image: apiResultJson.hdurl
             });
         }
     }
 });
-
 
 function getIPv4Addresses() {
     const interfaces = os.networkInterfaces();
