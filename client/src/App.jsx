@@ -196,7 +196,7 @@ function App() {
   useEffect(() => {
     const timer = setInterval(() => {
       doSync()
-    }, 1000 * 3)
+    }, 1000)
     return () => {
       clearInterval(timer)
     }

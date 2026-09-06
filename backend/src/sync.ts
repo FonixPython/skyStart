@@ -16,9 +16,9 @@ export async function deleteSync(req: Request, res: Response) {
         const syncId = Array.isArray(req.params.syncId) ? req.params.syncId[0] : req.params.syncId;
         const result = await prisma.sync.delete({ where: { id: syncId } })
         if (result) {
-            return res.status(200)
+            return res.sendStatus(200)
         } else {
-            return res.status(404)
+            return res.sendStatus(404)
         }
     } catch (e) {
         console.log(e)
@@ -53,7 +53,6 @@ export async function updateNotes(req: Request, res: Response) {
                 return res.sendStatus(500)
             }
         } catch (e) {
-            console.log(e)
             return res.status(404)
         }
     } catch (e) {
@@ -92,8 +91,7 @@ export async function getLastUpdate(req: Request, res: Response) {
         const result = await prisma.sync.findFirstOrThrow({ where: { id: syncId } })
         return res.json({ lastUpdate: result.lastUpdate })
     } catch (e) {
-        console.log(e)
-        return res.status(500)
+        return res.status(404)
     }
 }
 
