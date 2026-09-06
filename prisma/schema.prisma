@@ -1,0 +1,14 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Sync {
+  id         String   @id @default(uuid())
+  notes      String
+  settings   String
+  lastUpdate DateTime
+}
