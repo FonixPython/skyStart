@@ -11,6 +11,9 @@ export function SticykNote(props) {
         props.setNotes(updatedNotes)
         localStorage.setItem("notes", JSON.stringify(updatedNotes))
         localStorage.setItem("lastUpdate", new Date().toISOString())
+        if (localStorage.getItem("sync") == 1) {
+            props.doSync()
+        }
     }
 
     function onCollapse() {
@@ -19,6 +22,9 @@ export function SticykNote(props) {
         props.setNotes(updatedNotes)
         localStorage.setItem("notes", JSON.stringify(updatedNotes))
         localStorage.setItem("lastUpdate", new Date().toISOString())
+        if (localStorage.getItem("sync") == 1) {
+            props.doSync()
+        }
     }
 
     function onDelete() {
@@ -27,6 +33,9 @@ export function SticykNote(props) {
         props.setNotes(updatedNotes)
         localStorage.setItem("notes", JSON.stringify(updatedNotes))
         localStorage.setItem("lastUpdate", new Date().toISOString())
+        if (localStorage.getItem("sync") == 1) {
+            props.doSync()
+        }
     }
 
     const onMove = (e, ui) => {

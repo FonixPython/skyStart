@@ -208,7 +208,7 @@ function App() {
         <Settings setShortcuts={setShortcuts} shortcuts={shortcuts} onClose={() => { setSettingsOpen(false) }} searchEngine={searchEngine} setSearchEngine={setSearchEngine} snapToGrid={snapToGrid} setSnapToGrid={setSnapToGrid} sync={sync} setSync={setSync} syncId={syncId} setSyncId={setSyncId}></Settings>
       </div>
       {notesVisible && Object.values(notes).map((note) => (
-        <SticykNote notes={notes} id={note.id} setNotes={setNotes} key={note.id} snapToGrid={snapToGrid} />
+        <SticykNote notes={notes} id={note.id} setNotes={setNotes} key={note.id} snapToGrid={snapToGrid} doSync={doSync} />
       ))}
       <main>
         <Clock></Clock>
