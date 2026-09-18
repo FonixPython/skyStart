@@ -41,7 +41,11 @@ export async function updateNotes(req: Request, res: Response) {
         }
         const syncId = Array.isArray(req.params.syncId) ? req.params.syncId[0] : req.params.syncId;
         try {
-            const result = await prisma.sync.update({ where: { id: syncId }, data: { notes: JSON.stringify(req.body.updatedNotes), lastUpdate: new Date() } })
+            const returnObject: Record<string, Note> = {}
+            req.body.updatedNotes.map((note: Note) => {
+                returnObject[note.id] = note
+            })
+            const result = await prisma.sync.update({ where: { id: syncId }, data: { notes: JSON.stringify(returnObject), lastUpdate: new Date() } })
             if (result) {
                 return res.sendStatus(200)
             } else {
@@ -60,11 +64,10 @@ export async function updateNotes(req: Request, res: Response) {
 export async function updateSettings(req: Request, res: Response) {
     try {
         if (req.body.updatedSettings || Array.isArray(req.body.updatedSettings)) {
-            res.status(400)
+            return res.status(400)
         }
         const syncId = Array.isArray(req.params.syncId) ? req.params.syncId[0] : req.params.syncId;
         try {
-            const current = await prisma.sync.findFirstOrThrow({ where: { id: syncId } })
             const result = await prisma.sync.update({ where: { id: syncId }, data: { settings: JSON.stringify(req.body.updatedSettings) } })
             if (result) {
                 return res.sendStatus(200)
