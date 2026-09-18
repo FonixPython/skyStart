@@ -162,7 +162,7 @@ function App() {
           localStorage.setItem("snapToGrid", JSON.stringify(newSettingsJson.settings.snapToGrid))
           localStorage.setItem("lastUpdate", lastUpdateJson.lastUpdate)
         }
-        else if (new Date(lastUpdateJson.lastUpdate) < new Date(localStorage.getItem("lastUpdate"))) {
+        else if (new Date(localStorage.getItem("lastUpdate")) - new Date(lastUpdateJson.lastUpdate) > 1000) {
           const notesResult = await fetch("/api/updateNotes/" + localStorage.getItem("syncId"), {
             method: "POST",
             headers: {
