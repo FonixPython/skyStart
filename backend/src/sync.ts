@@ -41,12 +41,7 @@ export async function updateNotes(req: Request, res: Response) {
         }
         const syncId = Array.isArray(req.params.syncId) ? req.params.syncId[0] : req.params.syncId;
         try {
-            const current = await prisma.sync.findFirstOrThrow({ where: { id: syncId } })
-            const updatedNotesObject = { ...JSON.parse(current.notes) }
-            req.body.updatedNotes.map((note: Note) => {
-                updatedNotesObject[note.id] = note
-            })
-            const result = await prisma.sync.update({ where: { id: syncId }, data: { notes: JSON.stringify(updatedNotesObject), lastUpdate: new Date() } })
+            const result = await prisma.sync.update({ where: { id: syncId }, data: { notes: JSON.stringify(req.body.updatedNotes), lastUpdate: new Date() } })
             if (result) {
                 return res.sendStatus(200)
             } else {
